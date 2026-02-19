@@ -21,6 +21,48 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   html { scroll-behavior: smooth; }
+<script>
+const GOOGLE_CLIENT_ID = "YOUR_REAL_CLIENT_ID.apps.googleusercontent.com";
+
+let googleInitialized = false;
+
+function initGoogle() {
+  if (googleInitialized) return;
+
+  google.accounts.id.initialize({
+    client_id: GOOGLE_CLIENT_ID,
+    callback: handleGoogleResponse,
+    auto_select: false,
+    cancel_on_tap_outside: true
+  });
+
+  googleInitialized = true;
+}
+
+function triggerGoogleSignIn(btn) {
+  initGoogle();
+
+  google.accounts.id.prompt((notification) => {
+    if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+      google.accounts.id.renderButton(btn, {
+        theme: "outline",
+        size: "large",
+        width: btn.offsetWidth
+      });
+    }
+  });
+}
+
+function handleGoogleResponse(response) {
+
+  const payload = JSON.parse(atob(response.credential.split('.')[1]));
+
+  document.getElementById("email").value = payload.email || "";
+  document.getElementById("fname").value = payload.given_name || "";
+  document.getElementById("lname").value = payload.family_name || "";
+
+}
+</script>
 
   body {
     background: var(--dark);
@@ -1757,3 +1799,4 @@ document.getElementById('contact-form').addEventListener('submit', function(e) {
 
 </body>
 </html>
+
