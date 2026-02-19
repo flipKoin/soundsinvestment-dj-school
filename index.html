@@ -1077,7 +1077,7 @@
             <div class="checkbox-group">
               <input type="checkbox" id="agree" required>
               <label for="agree">
-                I agree to receive updates about Sound Investment DJ School and understand I can unsubscribe at any time. View our <a href="#" onclick="openModal('modal-privacy');return false;">Privacy Policy</a>.
+                I agree to receive updates about Sounds Investment DJ School and understand I can unsubscribe at any time. View our <a href="#" onclick="openModal('modal-privacy');return false;">Privacy Policy</a>.
               </label>
             </div>
 
@@ -1577,7 +1577,7 @@ function triggerGoogleSignIn(btnEl) {
     <p>You have the right to request deletion of your data at any time. Contact us at the address below and we will remove your information within 30 days.</p>
 
     <h3>Contact</h3>
-    <p>For privacy-related questions, email us at <a href="mailto:info@soundsinvestment.com" style="color:var(--gold)">info@soundsinvestment.com</a></p>
+    <p>For privacy-related questions, email us at <a href="/cdn-cgi/l/email-protection#7a13141c153a09150f141e0913140c1f090e171f140e54191517" style="color:var(--gold)"><span class="__cf_email__" data-cfemail="bad3d4dcd5fac9d5cfd4dec9d3d4ccdfc9ced7dfd4ce94d9d5d7">[email&#160;protected]</span></a></p>
   </div>
 </div>
 
@@ -1615,7 +1615,7 @@ function triggerGoogleSignIn(btnEl) {
     <p>We may update these terms at any time. Continued use of our services constitutes acceptance of updated terms.</p>
 
     <h3>Contact</h3>
-    <p>Questions about these terms? Email <a href="mailto:info@soundsinvestment.com" style="color:var(--gold)">info@soundsinvestment.com</a></p>
+    <p>Questions about these terms? Email <a href="/cdn-cgi/l/email-protection#aec7c0c8c1eeddc1dbc0caddc7c0d8cbdddac3cbc0da80cdc1c3" style="color:var(--gold)"><span class="__cf_email__" data-cfemail="2a43444c456a59455f444e5943445c4f595e474f445e04494547">[email&#160;protected]</span></a></p>
   </div>
 </div>
 
@@ -1658,7 +1658,7 @@ function triggerGoogleSignIn(btnEl) {
   </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 function openModal(id) {
   document.getElementById(id).classList.add('active');
   document.body.style.overflow = 'hidden';
@@ -1698,31 +1698,26 @@ document.getElementById('contact-form').addEventListener('submit', function(e) {
   btn.textContent = 'Sending...';
   btn.disabled = true;
 
-  // Split name into first/last for template compatibility
-  const nameParts = name.split(' ');
-  const firstName = nameParts[0];
-  const lastName  = nameParts.slice(1).join(' ') || '-';
-
+  // Use identical param structure as registration forms
   emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
     from_name   : name,
-    first_name  : firstName,
-    last_name   : lastName,
     from_email  : email,
     reply_to    : email,
-    phone       : subject || '(no subject)',
-    experience  : 'N/A - Contact Form',
+    phone       : subject || 'General Inquiry',
+    experience  : 'Contact Form',
     goal        : message,
-    form_source : 'Contact Us Form - ' + subject,
-    message     : message,
-    subject     : subject || 'General Inquiry',
+    form_source : 'Contact Us',
   })
   .then(() => {
     btn.style.display = 'none';
     document.getElementById('contact-success').style.display = 'block';
   })
   .catch((err) => {
-    console.error('EmailJS contact error:', err);
-    btn.textContent = 'Something went wrong - try again';
+    const errMsg = 'Error ' + (err.status || '?') + ': ' + (err.text || JSON.stringify(err));
+    console.error('EmailJS contact error:', errMsg);
+    btn.textContent = errMsg;
+    btn.style.fontSize = '0.7rem';
+    btn.style.letterSpacing = '0.05em';
     btn.disabled = false;
   });
 });
