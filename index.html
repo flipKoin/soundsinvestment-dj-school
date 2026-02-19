@@ -942,8 +942,19 @@
   .contact-submit:hover { background: #FFD700; box-shadow: 0 0 20px rgba(245,197,24,0.4); }
 
 </style>
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
+<script>
+window.onerror = function(msg, src, line, col, err) {
+  console.error('JS Error:', msg, 'at', src, line, col);
+  // Show visible error on page for debugging
+  const d = document.createElement('div');
+  d.style.cssText = 'position:fixed;bottom:10px;left:10px;right:10px;background:#c00;color:#fff;padding:10px;font-size:12px;z-index:99999;border-radius:4px;';
+  d.textContent = 'JS Error: ' + msg + ' (line ' + line + ')';
+  document.body.appendChild(d);
+  setTimeout(() => d.remove(), 8000);
+  return false;
+};
+</script>
 </head>
 <body>
 
@@ -1290,15 +1301,33 @@
   setInterval(updateCountdown, 1000);
 
   // ======================================================
-  // EMAILJS CONFIGURATION
-  // Replace these 3 values with your own from emailjs.com
+  // BREVO CONFIGURATION
+  // Replace with your API key from app.brevo.com
+  // Account > SMTP & API > API Keys > Create API Key
   // ======================================================
-  const EMAILJS_PUBLIC_KEY   = 'HM72cLrEco6_u4yJP';   // Account > API Keys
-  const EMAILJS_SERVICE_ID   = 'service_qu35i89';   // Email Services tab
-  const EMAILJS_TEMPLATE_ID  = 'template_h0qwo7j';  // Email Templates tab
+  // Brevo API key is securely stored in the Cloudflare Worker - not here
+  
+  
   // ======================================================
 
-  emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+  async function sendBrevoEmail(params) {
+    // Calls your Cloudflare Worker which proxies to Brevo server-side
+    // Replace WORKER_URL with your actual worker URL after deploying
+    const WORKER_URL = 'https://sounds-investment.gocomputerhelp.workers.dev/submit';
+
+    const response = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(params)
+    });
+
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      throw new Error(err.error || 'Worker request failed (' + response.status + ')');
+    }
+    return response.json();
+  }
+
 
   function handleFormSubmit(formId, wrapperId, successId, btnId, isShort) {
     const form = document.getElementById(formId);
@@ -1310,7 +1339,7 @@
       // Validation
       const inputs = form.querySelectorAll('input[required], select[required]');
       let valid = true;
-      inputs.forEach(input => {
+      inputs.forEach(function(input) {
         if (input.type === 'checkbox' && !input.checked) {
           valid = false;
           input.style.outline = '2px solid #FF6B6B';
@@ -1325,44 +1354,42 @@
 
       if (!valid) {
         btn.textContent = '⚠ Please fill all required fields';
-        setTimeout(() => btn.textContent = isShort ? '🎶 Claim My Early Spot' : '🎶 Reserve My Early Access Spot', 2500);
+        setTimeout(function() {
+          btn.textContent = isShort ? '🎶 Claim My Early Spot' : '🎶 Reserve My Early Access Spot';
+        }, 2500);
         return;
       }
 
       btn.textContent = 'Sending...';
       btn.disabled = true;
 
-      // Build template params from form fields
-      const params = isShort ? {
+      // Build params
+      var params = isShort ? {
         from_name  : document.getElementById('fname2').value,
         from_email : document.getElementById('email2').value,
-        experience : document.getElementById('exp2').value  || 'Not specified',
+        experience : document.getElementById('exp2').value || 'Not specified',
         goal       : 'Not specified',
         phone      : 'Not provided',
-        form_source: 'Bottom CTA Form',
+        form_source: 'Bottom CTA Form'
       } : {
-        from_name  : document.getElementById('fname').value + ' ' + document.getElementById('lname').value,
+        from_name  : (document.getElementById('fname').value + ' ' + document.getElementById('lname').value).trim(),
         from_email : document.getElementById('email').value,
         phone      : document.getElementById('phone').value || 'Not provided',
         experience : document.getElementById('experience').value || 'Not specified',
-        goal       : document.getElementById('goal').value       || 'Not specified',
-        form_source: 'Hero Registration Form',
+        goal       : document.getElementById('goal').value || 'Not specified',
+        form_source: 'Hero Registration Form'
       };
 
-      params.reply_to = params.from_email;
-
-      emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params)
-        .then(() => {
+      sendBrevoEmail(params)
+        .then(function() {
           document.getElementById(wrapperId).style.display = 'none';
           document.getElementById(successId).style.display = 'block';
         })
-        .catch(err => {
-          console.error('EmailJS error:', err);
-          btn.textContent = '⚠ Something went wrong - try again';
+        .catch(function(err) {
+          console.error('Brevo error:', err);
+          btn.textContent = 'Error: ' + (err.message || 'Send failed - try again');
+          btn.style.fontSize = '0.72rem';
           btn.disabled = false;
-          setTimeout(() => {
-            btn.textContent = isShort ? '🎶 Claim My Early Spot' : '🎶 Reserve My Early Access Spot';
-          }, 3000);
         });
     });
   }
@@ -1659,13 +1686,7 @@ function triggerGoogleSignIn(btnEl) {
 </div>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-// Ensure EmailJS is initialized in this scope too
-(function() {
-  const _key = 'HM72cLrEco6_u4yJP';
-  if (typeof emailjs !== 'undefined') {
-    emailjs.init({ publicKey: _key });
-  }
-})();
+// Contact form uses Cloudflare Worker (same as registration forms)
 
 function openModal(id) {
   document.getElementById(id).classList.add('active');
@@ -1707,25 +1728,39 @@ document.getElementById('contact-form').addEventListener('submit', function(e) {
   btn.disabled = true;
 
   // Use identical param structure as registration forms
-  emailjs.send('service_qu35i89', 'template_h0qwo7j', {
-    from_name   : name,
-    from_email  : email,
-    reply_to    : email,
-    phone       : subject || 'General Inquiry',
-    experience  : 'Contact Form',
-    goal        : message,
-    form_source : 'Contact Us',
+  const WORKER_URL = 'https://sounds-investment.gocomputerhelp.workers.dev/submit';
+  fetch(WORKER_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      from_name   : name,
+      from_email  : email,
+      phone       : subject || 'General Inquiry',
+      experience  : 'Contact Form',
+      goal        : message,
+      form_source : 'Contact Us',
+      is_contact  : true,
+      contact_subject: subject,
+      contact_message: message,
+      dummy_subject: 'Contact Form: ' + (subject || 'General Inquiry') + ' - from ' + name,
+      htmlContent: '<div style="font-family:Arial,sans-serif;padding:24px;">' +
+        '<h2 style="color:#F5C518;">New Contact Message</h2>' +
+        '<p><strong>From:</strong> ' + name + ' (' + email + ')</p>' +
+        '<p><strong>Subject:</strong> ' + (subject || 'General Inquiry') + '</p>' +
+        '<p><strong>Message:</strong></p>' +
+        '<p style="background:#f5f5f5;padding:16px;border-radius:4px;">' + message + '</p>' +
+        '</div>'
+    })
   })
+  .then(r => r.ok ? r.json() : r.json().then(e => {{ throw new Error(e.message) }}))
   .then(() => {
     btn.style.display = 'none';
     document.getElementById('contact-success').style.display = 'block';
   })
   .catch((err) => {
-    const errMsg = 'Error ' + (err.status || '?') + ': ' + (err.text || JSON.stringify(err));
-    console.error('EmailJS contact error:', errMsg);
-    btn.textContent = errMsg;
-    btn.style.fontSize = '0.7rem';
-    btn.style.letterSpacing = '0.05em';
+    console.error('Brevo contact error:', err);
+    btn.textContent = 'Error: ' + err.message;
+    btn.style.fontSize = '0.75rem';
     btn.disabled = false;
   });
 });
