@@ -1727,7 +1727,6 @@ document.getElementById('contact-form').addEventListener('submit', function(e) {
   btn.textContent = 'Sending...';
   btn.disabled = true;
 
-  // Use identical param structure as registration forms
   const WORKER_URL = 'https://sounds-investment.gocomputerhelp.workers.dev/submit';
   fetch(WORKER_URL, {
     method: 'POST',
@@ -1735,21 +1734,11 @@ document.getElementById('contact-form').addEventListener('submit', function(e) {
     body: JSON.stringify({
       from_name   : name,
       from_email  : email,
-      phone       : subject || 'General Inquiry',
-      experience  : 'Contact Form',
+      phone       : 'N/A',
+      experience  : subject || 'General Inquiry',
       goal        : message,
       form_source : 'Contact Us',
-      is_contact  : true,
-      contact_subject: subject,
-      contact_message: message,
-      dummy_subject: 'Contact Form: ' + (subject || 'General Inquiry') + ' - from ' + name,
-      htmlContent: '<div style="font-family:Arial,sans-serif;padding:24px;">' +
-        '<h2 style="color:#F5C518;">New Contact Message</h2>' +
-        '<p><strong>From:</strong> ' + name + ' (' + email + ')</p>' +
-        '<p><strong>Subject:</strong> ' + (subject || 'General Inquiry') + '</p>' +
-        '<p><strong>Message:</strong></p>' +
-        '<p style="background:#f5f5f5;padding:16px;border-radius:4px;">' + message + '</p>' +
-        '</div>'
+      is_contact  : true
     })
   })
   .then(r => r.ok ? r.json() : r.json().then(e => {{ throw new Error(e.message) }}))
