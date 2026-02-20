@@ -2180,7 +2180,7 @@ document.getElementById('contact-form').addEventListener('submit', function(e) {
 
 
 <!-- ==================== AUDIO PLAYER ==================== -->
-<audio id="bgAudio" loop autoplay muted preload="auto">
+<audio id="bgAudio" loop preload="auto">
   <source src="https://raw.githubusercontent.com/flipKoin/soundsinvestment-dj-school/main/Under%20the%20Red%20Strobe.mp3" type="audio/mpeg">
 </audio>
 
@@ -2226,9 +2226,10 @@ document.getElementById('contact-form').addEventListener('submit', function(e) {
   function toggleExpand() {
     expandedOpen = !expandedOpen;
     expanded.style.display = expandedOpen ? 'block' : 'none';
-    // Unmute when opening the player
-    if (expandedOpen && audio.muted) {
+    // Play and unmute on first tap
+    if (expandedOpen) {
       audio.muted = false;
+      audio.play();
       muteIcon.textContent = '🔊';
       volumeBar.value = audio.volume * 100;
       if (siteLogo) siteLogo.classList.add('logo-pulsing');
@@ -2287,11 +2288,7 @@ document.getElementById('contact-form').addEventListener('submit', function(e) {
     if (siteLogo) siteLogo.classList.toggle('logo-pulsing', !audio.muted);
   });
 
-  // Start vinyl spinning (autoplay muted)
-  window.addEventListener('load', () => {
-    vinyl.classList.add('playing');
-    floatBtn.classList.add('playing');
-  });
+  // Vinyl spins only when audio actually plays
 </script>
 
 </body>
