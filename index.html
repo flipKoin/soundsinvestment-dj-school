@@ -797,6 +797,329 @@
     opacity: 1;
   }
 
+
+  /* ===================== EQ VISUALIZER ===================== */
+  .eq-visualizer {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 4px;
+    height: 48px;
+    margin: 24px auto 0;
+    width: 200px;
+  }
+
+  .eq-bar {
+    width: 6px;
+    border-radius: 3px 3px 0 0;
+    background: linear-gradient(to top, var(--gold), rgba(245,197,24,0.3));
+    animation: eq-bounce 0.8s ease-in-out infinite alternate;
+    min-height: 4px;
+  }
+
+  .eq-bar:nth-child(1)  { animation-duration: 0.6s; animation-delay: 0.0s; }
+  .eq-bar:nth-child(2)  { animation-duration: 0.9s; animation-delay: 0.1s; }
+  .eq-bar:nth-child(3)  { animation-duration: 0.5s; animation-delay: 0.2s; }
+  .eq-bar:nth-child(4)  { animation-duration: 0.7s; animation-delay: 0.05s; }
+  .eq-bar:nth-child(5)  { animation-duration: 1.0s; animation-delay: 0.15s; }
+  .eq-bar:nth-child(6)  { animation-duration: 0.6s; animation-delay: 0.3s; }
+  .eq-bar:nth-child(7)  { animation-duration: 0.8s; animation-delay: 0.0s; }
+  .eq-bar:nth-child(8)  { animation-duration: 0.5s; animation-delay: 0.2s; }
+  .eq-bar:nth-child(9)  { animation-duration: 0.9s; animation-delay: 0.1s; }
+  .eq-bar:nth-child(10) { animation-duration: 0.7s; animation-delay: 0.25s; }
+  .eq-bar:nth-child(11) { animation-duration: 0.6s; animation-delay: 0.05s; }
+  .eq-bar:nth-child(12) { animation-duration: 1.0s; animation-delay: 0.35s; }
+
+  .eq-visualizer.paused .eq-bar {
+    animation-play-state: paused;
+    height: 4px !important;
+  }
+
+  @keyframes eq-bounce {
+    from { height: 4px; }
+    to   { height: 44px; }
+  }
+
+  /* ===================== VINYL DECORATION ===================== */
+  .vinyl-record {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: radial-gradient(circle at center,
+      #111 0%, #111 8%,
+      #1a1a1a 8%, #1a1a1a 12%,
+      #0d0d0d 12%, #0d0d0d 18%,
+      #1a1a1a 18%, #1a1a1a 22%,
+      #0d0d0d 22%, #0d0d0d 28%,
+      #1a1a1a 28%, #1a1a1a 32%,
+      #0d0d0d 32%, #0d0d0d 38%,
+      #1a1a1a 38%, #1a1a1a 100%
+    );
+    border: 3px solid rgba(245,197,24,0.3);
+    position: relative;
+    animation: vinyl-spin 6s linear infinite paused;
+    margin: 0 auto;
+    box-shadow: 0 0 30px rgba(0,0,0,0.8), 0 0 60px rgba(245,197,24,0.05);
+  }
+
+  .vinyl-record.spinning { animation-play-state: running; }
+
+  .vinyl-record::before {
+    content: '';
+    position: absolute;
+    width: 52px;
+    height: 52px;
+    background: radial-gradient(circle, var(--gold) 0%, var(--gold-dark) 60%, #111 60%);
+    border-radius: 50%;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .vinyl-record::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: #111;
+    border-radius: 50%;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .vinyl-section {
+    padding: 60px 20px;
+    text-align: center;
+    max-width: 1000px;
+    margin: 0 auto;
+    border-top: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .vinyl-section p {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.3);
+    margin-top: 16px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* ===================== DJ MIXER KNOBS ===================== */
+  .mixer-section {
+    padding: 60px 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+    border-top: 1px solid rgba(255,255,255,0.04);
+    text-align: center;
+  }
+
+  .mixer-board {
+    background: rgba(10,10,10,0.9);
+    border: 1px solid rgba(245,197,24,0.15);
+    border-radius: 12px;
+    padding: 32px 24px;
+    margin-top: 32px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 32px 40px;
+    position: relative;
+  }
+
+  .mixer-board::before {
+    content: 'SOUNDS INVESTMENT · MIXER';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    background: #0a0a0a;
+    padding: 0 12px;
+  }
+
+  .knob-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .knob-wrap {
+    position: relative;
+    width: 56px;
+    height: 56px;
+    cursor: pointer;
+  }
+
+  .knob {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #444, #111);
+    border: 2px solid rgba(245,197,24,0.4);
+    position: relative;
+    transition: border-color 0.2s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05);
+  }
+
+  .knob-wrap:hover .knob { border-color: var(--gold); }
+
+  .knob-indicator {
+    position: absolute;
+    width: 3px;
+    height: 16px;
+    background: var(--gold);
+    border-radius: 2px;
+    top: 6px;
+    left: 50%;
+    transform-origin: bottom center;
+    transform: translateX(-50%);
+  }
+
+  .knob-ring {
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    border-top-color: rgba(245,197,24,0.5);
+    pointer-events: none;
+  }
+
+  .knob-label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+  }
+
+  .knob-value {
+    font-size: 0.65rem;
+    color: var(--gold);
+    font-family: monospace;
+  }
+
+  .fader-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .fader-wrap {
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .fader-track {
+    width: 4px;
+    height: 90px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 2px;
+    position: relative;
+  }
+
+  .fader-fill {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: linear-gradient(to top, var(--gold), rgba(245,197,24,0.3));
+    border-radius: 2px;
+    transition: height 0.1s;
+  }
+
+  .fader-thumb {
+    width: 24px;
+    height: 10px;
+    background: linear-gradient(to bottom, #555, #222);
+    border: 1px solid rgba(245,197,24,0.5);
+    border-radius: 2px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+  }
+
+  input[type=range].fader-input {
+    writing-mode: vertical-lr;
+    direction: rtl;
+    height: 90px;
+    width: 24px;
+    appearance: none;
+    background: transparent;
+    position: absolute;
+    cursor: pointer;
+    opacity: 0;
+  }
+
+  input[type=range].knob-input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    border-radius: 50%;
+  }
+
+  .crossfader-wrap {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .crossfader-label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: rgba(255,255,255,0.3);
+    text-transform: uppercase;
+  }
+
+  .crossfader-track {
+    width: 280px;
+    max-width: 100%;
+    height: 6px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 3px;
+    position: relative;
+  }
+
+  .crossfader-fill {
+    position: absolute;
+    top: 0; bottom: 0;
+    background: linear-gradient(to right, rgba(245,197,24,0.3), var(--gold));
+    border-radius: 3px;
+    transition: width 0.05s;
+  }
+
+  input[type=range].crossfader-input {
+    position: absolute;
+    inset: -8px 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+  }
+
+  .deck-labels {
+    width: 280px;
+    max-width: 100%;
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.25);
+  }
+
+
   /* ===================== TESTIMONIALS ===================== */
   .testimonials {
     padding: 80px 20px;
@@ -1314,6 +1637,20 @@ window.onerror = function(msg, src, line, col, err) {
     <div class="badge">🎧 Early Registration Open Now</div>
 
     <p class="hero-tagline">Turn Your <span>Passion</span> Into a <span>Profession</span></p>
+    <div class="eq-visualizer" id="eqViz">
+      <div class="eq-bar"></div>
+      <div class="eq-bar"></div>
+      <div class="eq-bar"></div>
+      <div class="eq-bar"></div>
+      <div class="eq-bar"></div>
+      <div class="eq-bar"></div>
+      <div class="eq-bar"></div>
+      <div class="eq-bar"></div>
+      <div class="eq-bar"></div>
+      <div class="eq-bar"></div>
+      <div class="eq-bar"></div>
+      <div class="eq-bar"></div>
+    </div>
     <p class="hero-desc">
       Master the art of DJing from the ground up. Learn music theory, mixing techniques, crowd reading, and business skills - everything you need to build a career that pays.
     </p>
@@ -1606,6 +1943,194 @@ window.onerror = function(msg, src, line, col, err) {
 
   </div>
 </section>
+
+
+<!-- ==================== VINYL + MIXER ==================== -->
+<section class="vinyl-section">
+  <p class="section-label">Feel The Music</p>
+  <div class="vinyl-record" id="vinylRecord"></div>
+  <p>Tap to spin &nbsp;·&nbsp; Music starts when you hit play</p>
+</section>
+
+<section class="mixer-section">
+  <p class="section-label">Get On The Decks</p>
+  <h2 class="section-title">Play Around. <span style="color:var(--gold)">Get The Feel.</span></h2>
+
+  <div class="mixer-board">
+
+    <!-- DECK A KNOBS -->
+    <div class="knob-group">
+      <div class="knob-wrap" id="knob-bass-a">
+        <div class="knob"><div class="knob-indicator"></div></div>
+        <div class="knob-ring"></div>
+        <input type="range" class="knob-input" min="0" max="100" value="70">
+      </div>
+      <div class="knob-label">Bass A</div>
+      <div class="knob-value" id="val-bass-a">70</div>
+    </div>
+
+    <div class="knob-group">
+      <div class="knob-wrap" id="knob-mid-a">
+        <div class="knob"><div class="knob-indicator"></div></div>
+        <div class="knob-ring"></div>
+        <input type="range" class="knob-input" min="0" max="100" value="60">
+      </div>
+      <div class="knob-label">Mid A</div>
+      <div class="knob-value" id="val-mid-a">60</div>
+    </div>
+
+    <div class="knob-group">
+      <div class="knob-wrap" id="knob-hi-a">
+        <div class="knob"><div class="knob-indicator"></div></div>
+        <div class="knob-ring"></div>
+        <input type="range" class="knob-input" min="0" max="100" value="55">
+      </div>
+      <div class="knob-label">Hi A</div>
+      <div class="knob-value" id="val-hi-a">55</div>
+    </div>
+
+    <!-- FADER A -->
+    <div class="fader-group">
+      <div class="fader-wrap">
+        <div class="fader-track">
+          <div class="fader-fill" id="fill-vol-a" style="height:80%"></div>
+          <div class="fader-thumb" id="thumb-vol-a" style="bottom:calc(80% - 5px)"></div>
+        </div>
+        <input type="range" class="fader-input" min="0" max="100" value="80" id="fader-vol-a">
+      </div>
+      <div class="knob-label">Vol A</div>
+      <div class="knob-value" id="val-vol-a">80</div>
+    </div>
+
+    <!-- FADER B -->
+    <div class="fader-group">
+      <div class="fader-wrap">
+        <div class="fader-track">
+          <div class="fader-fill" id="fill-vol-b" style="height:75%"></div>
+          <div class="fader-thumb" id="thumb-vol-b" style="bottom:calc(75% - 5px)"></div>
+        </div>
+        <input type="range" class="fader-input" min="0" max="100" value="75" id="fader-vol-b">
+      </div>
+      <div class="knob-label">Vol B</div>
+      <div class="knob-value" id="val-vol-b">75</div>
+    </div>
+
+    <!-- DECK B KNOBS -->
+    <div class="knob-group">
+      <div class="knob-wrap" id="knob-bass-b">
+        <div class="knob"><div class="knob-indicator"></div></div>
+        <div class="knob-ring"></div>
+        <input type="range" class="knob-input" min="0" max="100" value="65">
+      </div>
+      <div class="knob-label">Bass B</div>
+      <div class="knob-value" id="val-bass-b">65</div>
+    </div>
+
+    <div class="knob-group">
+      <div class="knob-wrap" id="knob-mid-b">
+        <div class="knob"><div class="knob-indicator"></div></div>
+        <div class="knob-ring"></div>
+        <input type="range" class="knob-input" min="0" max="100" value="58">
+      </div>
+      <div class="knob-label">Mid B</div>
+      <div class="knob-value" id="val-mid-b">58</div>
+    </div>
+
+    <div class="knob-group">
+      <div class="knob-wrap" id="knob-hi-b">
+        <div class="knob"><div class="knob-indicator"></div></div>
+        <div class="knob-ring"></div>
+        <input type="range" class="knob-input" min="0" max="100" value="50">
+      </div>
+      <div class="knob-label">Hi B</div>
+      <div class="knob-value" id="val-hi-b">50</div>
+    </div>
+
+    <!-- CROSSFADER -->
+    <div class="crossfader-wrap">
+      <div class="deck-labels"><span>DECK A</span><span>DECK B</span></div>
+      <div class="crossfader-track">
+        <div class="crossfader-fill" id="cross-fill" style="left:50%;width:0"></div>
+        <input type="range" class="crossfader-input" min="0" max="100" value="50" id="crossfader">
+      </div>
+      <div class="crossfader-label">Crossfader</div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+  // ---- EQ Visualizer tied to audio ----
+  const eqViz = document.getElementById('eqViz');
+  const vinylRecord = document.getElementById('vinylRecord');
+  const bgAudio2 = document.getElementById('bgAudio');
+
+  bgAudio2.addEventListener('play', () => {
+    eqViz.classList.remove('paused');
+    vinylRecord.classList.add('spinning');
+  });
+  bgAudio2.addEventListener('pause', () => {
+    eqViz.classList.add('paused');
+    vinylRecord.classList.remove('spinning');
+  });
+
+  // Vinyl click to toggle play
+  vinylRecord.addEventListener('click', () => {
+    if (bgAudio2.paused) { bgAudio2.muted = false; bgAudio2.play(); }
+    else bgAudio2.pause();
+  });
+
+  // ---- Knobs ----
+  document.querySelectorAll('.knob-wrap').forEach(wrap => {
+    const input = wrap.querySelector('.knob-input');
+    const indicator = wrap.querySelector('.knob-indicator');
+    const id = wrap.id;
+    const valEl = document.getElementById('val-' + id.replace('knob-', ''));
+
+    function updateKnob(val) {
+      // Map 0-100 to -135deg to +135deg
+      const deg = (val / 100) * 270 - 135;
+      indicator.style.transform = \`translateX(-50%) rotate(\${deg}deg)\`;
+      indicator.style.transformOrigin = 'bottom center';
+      if (valEl) valEl.textContent = val;
+    }
+
+    updateKnob(input.value);
+    input.addEventListener('input', () => updateKnob(input.value));
+  });
+
+  // ---- Faders ----
+  ['a','b'].forEach(deck => {
+    const fader = document.getElementById('fader-vol-' + deck);
+    const fill  = document.getElementById('fill-vol-' + deck);
+    const thumb = document.getElementById('thumb-vol-' + deck);
+    const val   = document.getElementById('val-vol-' + deck);
+
+    fader.addEventListener('input', () => {
+      const pct = fader.value + '%';
+      fill.style.height = pct;
+      thumb.style.bottom = 'calc(' + pct + ' - 5px)';
+      if (val) val.textContent = fader.value;
+    });
+  });
+
+  // ---- Crossfader ----
+  const crossfader = document.getElementById('crossfader');
+  const crossFill  = document.getElementById('cross-fill');
+
+  crossfader.addEventListener('input', () => {
+    const v = crossfader.value;
+    if (v <= 50) {
+      crossFill.style.left = v + '%';
+      crossFill.style.width = (50 - v) + '%';
+      crossFill.style.background = 'linear-gradient(to left, rgba(245,197,24,0.3), var(--gold))';
+    } else {
+      crossFill.style.left = '50%';
+      crossFill.style.width = (v - 50) + '%';
+      crossFill.style.background = 'linear-gradient(to right, rgba(245,197,24,0.3), var(--gold))';
+    }
+  });
+</script>
 
 <!-- ==================== TESTIMONIALS ==================== -->
 <section class="testimonials">
