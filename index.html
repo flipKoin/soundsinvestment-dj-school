@@ -3099,13 +3099,67 @@ document.getElementById('contact-form').addEventListener('submit', function(e) {
     sparkleFrame = requestAnimationFrame(animateSparkles);
   }
 
+  function playWhoosh() {
+    try {
+      const actx = new (window.AudioContext || window.webkitAudioContext)();
+
+      // Whoosh = filtered noise sweep
+      const bufferSize = actx.sampleRate * 1.2;
+      const buffer = actx.createBuffer(1, bufferSize, actx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = (Math.random() * 2 - 1);
+      }
+
+      const source = actx.createBufferSource();
+      source.buffer = buffer;
+
+      // Bandpass filter sweeping up like a rocket
+      const filter = actx.createBiquadFilter();
+      filter.type = 'bandpass';
+      filter.frequency.setValueAtTime(200, actx.currentTime);
+      filter.frequency.exponentialRampToValueAtTime(4000, actx.currentTime + 0.8);
+      filter.Q.value = 3;
+
+      // Gain envelope — sharp attack, fast decay
+      const gainNode = actx.createGain();
+      gainNode.gain.setValueAtTime(0, actx.currentTime);
+      gainNode.gain.linearRampToValueAtTime(0.6, actx.currentTime + 0.05);
+      gainNode.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + 1.2);
+
+      // Add a short high-pitched sparkle tone on top
+      const osc = actx.createOscillator();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(800, actx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(3200, actx.currentTime + 0.4);
+      const oscGain = actx.createGain();
+      oscGain.gain.setValueAtTime(0.3, actx.currentTime);
+      oscGain.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + 0.5);
+
+      source.connect(filter);
+      filter.connect(gainNode);
+      gainNode.connect(actx.destination);
+
+      osc.connect(oscGain);
+      oscGain.connect(actx.destination);
+
+      source.start();
+      osc.start();
+      osc.stop(actx.currentTime + 0.5);
+      source.stop(actx.currentTime + 1.2);
+    } catch(e) {
+      console.warn('Audio context error:', e);
+    }
+  }
+
   function toggleSparkle() {
     sparkleActive = !sparkleActive;
     const btn = document.getElementById('sparkleBtn');
     btn.classList.toggle('active', sparkleActive);
-    if (sparkleActive && !sparkleFrame) {
-      animateSparkles();
-    } else if (!sparkleActive) {
+    if (sparkleActive) {
+      playWhoosh();
+      if (!sparkleFrame) animateSparkles();
+    } else {
       setTimeout(() => {
         cancelAnimationFrame(sparkleFrame);
         sparkleFrame = null;
