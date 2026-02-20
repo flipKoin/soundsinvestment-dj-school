@@ -621,6 +621,7 @@
   }
 
   #playerExpanded {
+    transition: opacity 0.4s ease;
     background: rgba(8, 6, 0, 0.97);
     border: 1px solid rgba(245,197,24,0.4);
     border-radius: 12px;
@@ -2241,20 +2242,52 @@ document.getElementById('contact-form').addEventListener('submit', function(e) {
 
   let expandedOpen = false;
 
+  let fadeTimer = null;
+
+  function scheduleFade() {
+    clearTimeout(fadeTimer);
+    fadeTimer = setTimeout(() => {
+      expanded.style.opacity = '0';
+      expanded.style.pointerEvents = 'none';
+      setTimeout(() => {
+        expanded.style.display = 'none';
+        expanded.style.opacity = '1';
+        expanded.style.pointerEvents = 'auto';
+        expandedOpen = false;
+      }, 400);
+    }, 3000);
+  }
+
   function toggleExpand() {
     expandedOpen = !expandedOpen;
-    expanded.style.display = expandedOpen ? 'block' : 'none';
     if (expandedOpen) {
+      expanded.style.display = 'block';
+      expanded.style.opacity = '1';
+      expanded.style.pointerEvents = 'auto';
       audio.muted = false;
       audio.play();
       muteIcon.textContent = '🔊';
       volumeBar.value = audio.volume * 100;
       if (siteLogo) siteLogo.classList.add('logo-pulsing');
+      scheduleFade();
     } else {
+      clearTimeout(fadeTimer);
+      expanded.style.opacity = '0';
+      expanded.style.pointerEvents = 'none';
+      setTimeout(() => {
+        expanded.style.display = 'none';
+        expanded.style.opacity = '1';
+        expanded.style.pointerEvents = 'auto';
+      }, 400);
       audio.pause();
       if (siteLogo) siteLogo.classList.remove('logo-pulsing');
     }
   }
+
+  // Reset fade timer on any interaction with the panel
+  expanded.addEventListener('touchstart', scheduleFade);
+  expanded.addEventListener('mouseenter', () => clearTimeout(fadeTimer));
+  expanded.addEventListener('mouseleave', scheduleFade);
 
   function togglePlay() {
     if (audio.paused) {
