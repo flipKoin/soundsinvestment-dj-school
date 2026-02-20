@@ -2226,6 +2226,13 @@ document.getElementById('contact-form').addEventListener('submit', function(e) {
   function toggleExpand() {
     expandedOpen = !expandedOpen;
     expanded.style.display = expandedOpen ? 'block' : 'none';
+    // Unmute when opening the player
+    if (expandedOpen && audio.muted) {
+      audio.muted = false;
+      muteIcon.textContent = '🔊';
+      volumeBar.value = audio.volume * 100;
+      if (siteLogo) siteLogo.classList.add('logo-pulsing');
+    }
   }
 
   function togglePlay() {
