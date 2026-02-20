@@ -2090,7 +2090,7 @@ window.onerror = function(msg, src, line, col, err) {
     function updateKnob(val) {
       // Map 0-100 to -135deg to +135deg
       const deg = (val / 100) * 270 - 135;
-      indicator.style.transform = \`translateX(-50%) rotate(\${deg}deg)\`;
+      indicator.style.transform = 'translateX(-50%) rotate(' + deg + 'deg)';
       indicator.style.transformOrigin = 'bottom center';
       if (valEl) valEl.textContent = val;
     }
