@@ -606,6 +606,78 @@
   }
 
 
+
+  /* ===================== AUDIO PLAYER ===================== */
+  .audio-player-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: rgba(10,10,10,0.95);
+    border-top: 1px solid rgba(245,197,24,0.3);
+    backdrop-filter: blur(12px);
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .audio-player-label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .audio-player-label .vinyl-icon {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid var(--gold);
+    display: inline-block;
+    position: relative;
+    animation: vinyl-spin 3s linear infinite paused;
+  }
+
+  .audio-player-label .vinyl-icon::after {
+    content: '';
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background: var(--gold);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .audio-player-label .vinyl-icon.playing {
+    animation-play-state: running;
+  }
+
+  .audio-player-bar audio {
+    flex: 1;
+    height: 32px;
+    min-width: 0;
+    accent-color: var(--gold);
+    filter: invert(0);
+  }
+
+  /* Style the native audio element */
+  .audio-player-bar audio::-webkit-media-controls-panel {
+    background: transparent;
+  }
+
+  @media (max-width: 480px) {
+    .audio-player-label span { display: none; }
+    .audio-player-bar { padding: 8px 12px; gap: 10px; }
+  }
+
   /* ===================== TESTIMONIALS ===================== */
   .testimonials {
     padding: 80px 20px;
@@ -2002,6 +2074,25 @@ document.getElementById('contact-form').addEventListener('submit', function(e) {
     btn.disabled = false;
   });
 });
+</script>
+
+
+<!-- ==================== AUDIO PLAYER ==================== -->
+<div class="audio-player-bar" id="audioBar">
+  <div class="audio-player-label">
+    <div class="vinyl-icon" id="vinylIcon"></div>
+    <span>Under The Red Strobe</span>
+  </div>
+  <audio id="bgAudio" controls loop preload="none">
+    <source src="Under_the_Red_Strobe.mp3" type="audio/mpeg">
+  </audio>
+</div>
+<script>
+  const audio = document.getElementById('bgAudio');
+  const vinyl = document.getElementById('vinylIcon');
+  audio.addEventListener('play', () => vinyl.classList.add('playing'));
+  audio.addEventListener('pause', () => vinyl.classList.remove('playing'));
+  audio.addEventListener('ended', () => vinyl.classList.remove('playing'));
 </script>
 
 </body>
