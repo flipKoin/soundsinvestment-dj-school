@@ -778,6 +778,24 @@
     50%       { box-shadow: 0 4px 20px rgba(0,0,0,0.6), 0 0 28px rgba(245,197,24,0.7); }
   }
 
+
+  /* ===================== GOLD DUST ===================== */
+  #goldDustCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9998;
+    opacity: 0;
+    transition: opacity 1.2s ease;
+  }
+
+  #goldDustCanvas.active {
+    opacity: 1;
+  }
+
   /* ===================== TESTIMONIALS ===================== */
   .testimonials {
     padding: 80px 20px;
@@ -2226,13 +2244,15 @@ document.getElementById('contact-form').addEventListener('submit', function(e) {
   function toggleExpand() {
     expandedOpen = !expandedOpen;
     expanded.style.display = expandedOpen ? 'block' : 'none';
-    // Play and unmute on first tap
     if (expandedOpen) {
       audio.muted = false;
       audio.play();
       muteIcon.textContent = '🔊';
       volumeBar.value = audio.volume * 100;
       if (siteLogo) siteLogo.classList.add('logo-pulsing');
+    } else {
+      audio.pause();
+      if (siteLogo) siteLogo.classList.remove('logo-pulsing');
     }
   }
 
@@ -2289,6 +2309,101 @@ document.getElementById('contact-form').addEventListener('submit', function(e) {
   });
 
   // Vinyl spins only when audio actually plays
+</script>
+
+
+<!-- ==================== GOLD DUST ==================== -->
+<canvas id="goldDustCanvas"></canvas>
+<script>
+  const canvas = document.getElementById('goldDustCanvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  let animFrame = null;
+  let dustActive = false;
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  function randomGold() {
+    const shades = [
+      'rgba(245,197,24,',
+      'rgba(255,220,60,',
+      'rgba(200,155,10,',
+      'rgba(255,240,120,',
+    ];
+    return shades[Math.floor(Math.random() * shades.length)];
+  }
+
+  function spawnParticle() {
+    return {
+      x: Math.random() * canvas.width,
+      y: -6,
+      size: Math.random() * 3 + 1,
+      speedY: Math.random() * 1.2 + 0.4,
+      speedX: (Math.random() - 0.5) * 0.6,
+      opacity: Math.random() * 0.7 + 0.3,
+      color: randomGold(),
+      wobble: Math.random() * Math.PI * 2,
+      wobbleSpeed: Math.random() * 0.03 + 0.01,
+    };
+  }
+
+  function animateDust() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Spawn new particles
+    if (dustActive && particles.length < 180) {
+      for (let i = 0; i < 3; i++) particles.push(spawnParticle());
+    }
+
+    particles.forEach(p => {
+      p.wobble += p.wobbleSpeed;
+      p.x += p.speedX + Math.sin(p.wobble) * 0.4;
+      p.y += p.speedY;
+      p.opacity -= 0.003;
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fillStyle = p.color + p.opacity + ')';
+      ctx.fill();
+    });
+
+    // Remove dead particles
+    particles = particles.filter(p => p.opacity > 0 && p.y < canvas.height + 10);
+
+    animFrame = requestAnimationFrame(animateDust);
+  }
+
+  function startDust() {
+    if (!dustActive) {
+      dustActive = true;
+      canvas.classList.add('active');
+      if (!animFrame) animateDust();
+    }
+  }
+
+  function stopDust() {
+    dustActive = false;
+    canvas.classList.remove('active');
+    // Let existing particles fade out naturally
+    setTimeout(() => {
+      if (!dustActive) {
+        cancelAnimationFrame(animFrame);
+        animFrame = null;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles = [];
+      }
+    }, 3000);
+  }
+
+  // Hook into audio play/pause
+  document.getElementById('bgAudio').addEventListener('play', startDust);
+  document.getElementById('bgAudio').addEventListener('pause', stopDust);
+  document.getElementById('bgAudio').addEventListener('ended', stopDust);
 </script>
 
 </body>
