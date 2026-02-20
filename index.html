@@ -2083,16 +2083,42 @@ document.getElementById('contact-form').addEventListener('submit', function(e) {
     <div class="vinyl-icon" id="vinylIcon"></div>
     <span>Under The Red Strobe</span>
   </div>
-  <audio id="bgAudio" controls loop preload="none">
+  <button id="unmuteBtn" onclick="toggleMute()" style="
+    background: rgba(245,197,24,0.1);
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-family: Oswald, sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    padding: 5px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s;
+  ">🔇 UNMUTE</button>
+  <audio id="bgAudio" controls loop autoplay muted preload="auto" style="flex:1;min-width:0;height:32px;accent-color:#F5C518;">
     <source src="https://raw.githubusercontent.com/flipKoin/soundsinvestment-dj-school/main/Under%20the%20Red%20Strobe.mp3" type="audio/mpeg">
   </audio>
 </div>
 <script>
   const audio = document.getElementById('bgAudio');
   const vinyl = document.getElementById('vinylIcon');
+  const unmuteBtn = document.getElementById('unmuteBtn');
+
+  function toggleMute() {
+    audio.muted = !audio.muted;
+    unmuteBtn.textContent = audio.muted ? '🔇 UNMUTE' : '🔊 MUTE';
+    unmuteBtn.style.background = audio.muted ? 'rgba(245,197,24,0.1)' : 'rgba(245,197,24,0.25)';
+  }
+
   audio.addEventListener('play', () => vinyl.classList.add('playing'));
   audio.addEventListener('pause', () => vinyl.classList.remove('playing'));
   audio.addEventListener('ended', () => vinyl.classList.remove('playing'));
+
+  // Start spinning vinyl since autoplay is on
+  window.addEventListener('load', () => {
+    vinyl.classList.add('playing');
+  });
 </script>
 
 </body>
