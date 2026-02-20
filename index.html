@@ -484,6 +484,128 @@
     margin-top: 6px;
   }
 
+
+
+  /* ===================== INSTRUCTOR ===================== */
+  .instructors {
+    padding: 80px 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .instructors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 32px;
+    margin-top: 48px;
+  }
+
+  .instructor-card {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-top: 3px solid var(--gold);
+    border-radius: 4px 4px 0 0;
+    padding: 32px 24px 28px;
+    text-align: center;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+  }
+
+  .instructor-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--gold-light);
+  }
+
+  .instructor-photo-wrap {
+    width: 140px;
+    height: 140px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid var(--gold);
+    animation: vinyl-spin 8s linear infinite;
+  }
+
+  .instructor-card:hover .instructor-photo-wrap {
+    animation-duration: 3s;
+  }
+
+  @keyframes vinyl-spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  .instructor-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .instructor-name {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.2rem;
+    color: var(--gold);
+    letter-spacing: 0.06em;
+    margin-bottom: 2px;
+  }
+
+  .instructor-title {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .instructor-bio {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.75;
+    margin-bottom: 20px;
+    text-align: left;
+  }
+
+  .instructor-stats {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .instructor-stat-num {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.1rem;
+    color: var(--gold);
+    font-weight: 700;
+    display: block;
+  }
+
+  .instructor-stat-label {
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+  }
+
+  .instructor-venues {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+  }
+
+  .venue-tag {
+    font-size: 0.68rem;
+    background: rgba(245,197,24,0.07);
+    border: 1px solid rgba(245,197,24,0.2);
+    color: var(--gold);
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.04em;
+  }
+
+
   /* ===================== TESTIMONIALS ===================== */
   .testimonials {
     padding: 80px 20px;
@@ -1181,6 +1303,116 @@ window.onerror = function(msg, src, line, col, err) {
       <div class="feature-title">Community & Mentorship</div>
       <p class="feature-desc">Access to our private community, live Q&As, feedback sessions, and mentorship from working DJs in your genre.</p>
     </div>
+  </div>
+</section>
+
+<!-- ==================== INSTRUCTORS ==================== -->
+<section class="instructors">
+  <p class="section-label">Your Instructors</p>
+  <h2 class="section-title">Learn From DJs <span style="color:var(--gold)">In The Scene</span></h2>
+
+  <div class="instructors-grid">
+
+    <!-- DJ FOODIE -->
+    <div class="instructor-card">
+      <div class="instructor-photo-wrap">
+        <img class="instructor-photo" src="dj_foodie_placeholder.png" alt="DJ Foodie" />
+      </div>
+      <div class="instructor-name">DJ Foodie</div>
+      <div class="instructor-title">Hip-Hop · Dancehall · Afrobeats</div>
+      <p class="instructor-bio">A Regina staple for nearly a decade. DJ Foodie has moved crowds across clubs, cultural events, and festivals — and now brings that raw experience into the classroom.</p>
+      <div class="instructor-stats">
+        <div>
+          <span class="instructor-stat-num">8+</span>
+          <span class="instructor-stat-label">Years</span>
+        </div>
+        <div>
+          <span class="instructor-stat-num">500+</span>
+          <span class="instructor-stat-label">Gigs</span>
+        </div>
+      </div>
+      <div class="instructor-venues">
+        <span class="venue-tag">The Lounge YQR</span>
+        <span class="venue-tag">Cultural Festivals</span>
+        <span class="venue-tag">Private Events</span>
+      </div>
+    </div>
+
+    <!-- DJ BLENDZ -->
+    <div class="instructor-card">
+      <div class="instructor-photo-wrap">
+        <img class="instructor-photo" src="dj_blendz_placeholder.png" alt="DJ Blendz" />
+      </div>
+      <div class="instructor-name">DJ Blendz</div>
+      <div class="instructor-title">Hip-Hop · House · Urban Club</div>
+      <p class="instructor-bio">Regina's top nightclub resident with a touring footprint across Canada. DJ Blendz knows what it takes to hold down a room — night after night, city after city.</p>
+      <div class="instructor-stats">
+        <div>
+          <span class="instructor-stat-num">10+</span>
+          <span class="instructor-stat-label">Years</span>
+        </div>
+        <div>
+          <span class="instructor-stat-num">800+</span>
+          <span class="instructor-stat-label">Gigs</span>
+        </div>
+      </div>
+      <div class="instructor-venues">
+        <span class="venue-tag">The Lounge YQR</span>
+        <span class="venue-tag">1059 Lounge</span>
+        <span class="venue-tag">Canada Tour</span>
+      </div>
+    </div>
+
+    <!-- DJ ANN -->
+    <div class="instructor-card">
+      <div class="instructor-photo-wrap">
+        <img class="instructor-photo" src="dj_ann_placeholder.png" alt="DJ Ann" />
+      </div>
+      <div class="instructor-name">DJ Ann</div>
+      <div class="instructor-title">Open Format · Hip-Hop · Club Nights</div>
+      <p class="instructor-bio">One of Regina's fastest rising DJs, holding down Thursday, Friday, and Saturday residencies across the city's hottest venues. DJ Ann brings versatility and crowd energy to every set.</p>
+      <div class="instructor-stats">
+        <div>
+          <span class="instructor-stat-num">5+</span>
+          <span class="instructor-stat-label">Years</span>
+        </div>
+        <div>
+          <span class="instructor-stat-num">300+</span>
+          <span class="instructor-stat-label">Gigs</span>
+        </div>
+      </div>
+      <div class="instructor-venues">
+        <span class="venue-tag">The Lounge YQR</span>
+        <span class="venue-tag">1059 Lounge</span>
+        <span class="venue-tag">Event Circuit</span>
+      </div>
+    </div>
+
+    <!-- DJ CLASEE -->
+    <div class="instructor-card">
+      <div class="instructor-photo-wrap">
+        <img class="instructor-photo" src="dj_clasee_placeholder.png" alt="DJ Clasee" />
+      </div>
+      <div class="instructor-name">DJ Clasee</div>
+      <div class="instructor-title">Hip-Hop · Club Format · Events</div>
+      <p class="instructor-bio">An established name on the Regina circuit with a reputation built over years of consistent performances. DJ Clasee brings structure, style, and real-world technique to every lesson.</p>
+      <div class="instructor-stats">
+        <div>
+          <span class="instructor-stat-num">8+</span>
+          <span class="instructor-stat-label">Years</span>
+        </div>
+        <div>
+          <span class="instructor-stat-num">600+</span>
+          <span class="instructor-stat-label">Gigs</span>
+        </div>
+      </div>
+      <div class="instructor-venues">
+        <span class="venue-tag">The Exchange</span>
+        <span class="venue-tag">The Cure</span>
+        <span class="venue-tag">Private Events</span>
+      </div>
+    </div>
+
   </div>
 </section>
 
