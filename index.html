@@ -607,85 +607,175 @@
 
 
 
+
   /* ===================== AUDIO PLAYER ===================== */
-  .audio-player-bar {
+  #floatPlayer {
     position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-    background: rgba(10,10,10,0.95);
-    border-top: 1px solid rgba(245,197,24,0.3);
-    backdrop-filter: blur(12px);
-    padding: 10px 24px;
+    bottom: calc(env(safe-area-inset-bottom) + 80px);
+    right: 20px;
+    z-index: 9999;
     display: flex;
-    align-items: center;
-    gap: 16px;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
   }
 
-  .audio-player-label {
+  #playerExpanded {
+    background: rgba(8, 6, 0, 0.97);
+    border: 1px solid rgba(245,197,24,0.4);
+    border-radius: 12px;
+    padding: 14px 16px;
+    width: 260px;
+    display: none;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.7), 0 0 20px rgba(245,197,24,0.1);
+  }
+
+  #playerExpanded .track-name {
     font-family: 'Oswald', sans-serif;
     font-size: 0.75rem;
     letter-spacing: 0.1em;
     color: var(--gold);
-    white-space: nowrap;
+    margin-bottom: 10px;
     display: flex;
     align-items: center;
     gap: 8px;
   }
 
-  .audio-player-label .vinyl-icon {
-    width: 18px;
-    height: 18px;
+  #playerExpanded .vinyl-icon {
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
     border: 2px solid var(--gold);
     display: inline-block;
     position: relative;
+    flex-shrink: 0;
     animation: vinyl-spin 3s linear infinite paused;
   }
 
-  .audio-player-label .vinyl-icon::after {
+  #playerExpanded .vinyl-icon::after {
     content: '';
     position: absolute;
-    width: 5px;
-    height: 5px;
+    width: 4px;
+    height: 4px;
     background: var(--gold);
     border-radius: 50%;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%,-50%);
   }
 
-  .audio-player-label .vinyl-icon.playing {
+  #playerExpanded .vinyl-icon.playing {
     animation-play-state: running;
   }
 
-  .audio-player-bar audio {
+  .player-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .player-btn {
+    background: rgba(245,197,24,0.1);
+    border: 1px solid rgba(245,197,24,0.3);
+    color: var(--gold);
+    font-size: 1rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    flex-shrink: 0;
+  }
+
+  .player-btn:hover { background: rgba(245,197,24,0.25); }
+
+  .seek-wrap {
     flex: 1;
-    height: 32px;
-    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .seek-bar {
+    width: 100%;
+    height: 3px;
+    appearance: none;
+    background: rgba(245,197,24,0.2);
+    border-radius: 2px;
+    cursor: pointer;
     accent-color: var(--gold);
-    filter: invert(0);
   }
 
-  /* Style the native audio element */
-  .audio-player-bar audio::-webkit-media-controls-panel {
-    background: transparent;
+  .seek-bar::-webkit-slider-thumb {
+    appearance: none;
+    width: 10px;
+    height: 10px;
+    background: var(--gold);
+    border-radius: 50%;
   }
 
-  @media (max-width: 480px) {
-    .audio-player-label span { display: none; }
-    .audio-player-bar { padding: 8px 12px; gap: 10px; }
+  .time-display {
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.3);
+    display: flex;
+    justify-content: space-between;
   }
 
-
-  @keyframes logo-pulse {
-    0%, 100% { filter: drop-shadow(0 0 60px rgba(245,197,24,0.6)) drop-shadow(0 0 120px rgba(245,197,24,0.25)); }
-    50%       { filter: drop-shadow(0 0 90px rgba(245,197,24,1.0)) drop-shadow(0 0 180px rgba(245,197,24,0.6)); }
+  .volume-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
 
-  .logo-pulsing {
-    animation: logo-pulse 1.8s ease-in-out infinite !important;
+  .volume-icon {
+    font-size: 0.8rem;
+    color: rgba(245,197,24,0.6);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .volume-bar {
+    flex: 1;
+    height: 3px;
+    appearance: none;
+    background: rgba(245,197,24,0.2);
+    border-radius: 2px;
+    cursor: pointer;
+    accent-color: var(--gold);
+  }
+
+  #floatBtn {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: rgba(8,6,0,0.97);
+    border: 2px solid var(--gold);
+    color: var(--gold);
+    font-size: 1.3rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.6), 0 0 12px rgba(245,197,24,0.2);
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+
+  #floatBtn:hover {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.6), 0 0 24px rgba(245,197,24,0.5);
+    transform: scale(1.05);
+  }
+
+  #floatBtn.playing {
+    animation: gold-pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes gold-pulse {
+    0%, 100% { box-shadow: 0 4px 20px rgba(0,0,0,0.6), 0 0 12px rgba(245,197,24,0.2); }
+    50%       { box-shadow: 0 4px 20px rgba(0,0,0,0.6), 0 0 28px rgba(245,197,24,0.7); }
   }
 
   /* ===================== TESTIMONIALS ===================== */
@@ -751,7 +841,7 @@
 
   /* ===================== FOOTER ===================== */
   footer {
-    padding: 30px 20px 80px;
+    padding: 30px 20px 40px;
     text-align: center;
     border-top: 1px solid rgba(255,255,255,0.05);
     font-size: 0.78rem;
@@ -2087,50 +2177,113 @@ document.getElementById('contact-form').addEventListener('submit', function(e) {
 </script>
 
 
-<!-- ==================== AUDIO PLAYER ==================== -->
-<div class="audio-player-bar" id="audioBar">
-  <div class="audio-player-label">
-    <div class="vinyl-icon" id="vinylIcon"></div>
-    <span>Under The Red Strobe</span>
-  </div>
-  <button id="unmuteBtn" onclick="toggleMute()" style="
-    background: rgba(245,197,24,0.1);
-    border: 1px solid var(--gold);
-    color: var(--gold);
-    font-family: Oswald, sans-serif;
-    font-size: 0.7rem;
-    letter-spacing: 0.1em;
-    padding: 5px 12px;
-    border-radius: 20px;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: background 0.2s;
-  ">🔇 UNMUTE</button>
-  <audio id="bgAudio" controls loop autoplay muted preload="auto" style="flex:1;min-width:0;height:32px;accent-color:#F5C518;">
-    <source src="https://raw.githubusercontent.com/flipKoin/soundsinvestment-dj-school/main/Under%20the%20Red%20Strobe.mp3" type="audio/mpeg">
-  </audio>
-</div>
-<script>
-  const audio = document.getElementById('bgAudio');
-  const vinyl = document.getElementById('vinylIcon');
-  const unmuteBtn = document.getElementById('unmuteBtn');
 
-  const logo = document.getElementById('siteLogo');
+
+<!-- ==================== AUDIO PLAYER ==================== -->
+<audio id="bgAudio" loop autoplay muted preload="auto">
+  <source src="https://raw.githubusercontent.com/flipKoin/soundsinvestment-dj-school/main/Under%20the%20Red%20Strobe.mp3" type="audio/mpeg">
+</audio>
+
+<div id="floatPlayer">
+  <div id="playerExpanded">
+    <div class="track-name">
+      <div class="vinyl-icon" id="vinylIcon"></div>
+      Under The Red Strobe
+    </div>
+    <div class="player-controls">
+      <button class="player-btn" id="playPauseBtn" onclick="togglePlay()">⏸</button>
+      <div class="seek-wrap">
+        <input type="range" class="seek-bar" id="seekBar" value="0" min="0" step="0.1">
+        <div class="time-display">
+          <span id="currentTime">0:00</span>
+          <span id="duration">0:00</span>
+        </div>
+      </div>
+    </div>
+    <div class="volume-wrap">
+      <span class="volume-icon" id="muteIcon" onclick="toggleMute()">🔊</span>
+      <input type="range" class="volume-bar" id="volumeBar" value="100" min="0" max="100">
+    </div>
+  </div>
+  <button id="floatBtn" onclick="toggleExpand()">🎵</button>
+</div>
+
+<script>
+  const audio       = document.getElementById('bgAudio');
+  const floatBtn    = document.getElementById('floatBtn');
+  const expanded    = document.getElementById('playerExpanded');
+  const vinyl       = document.getElementById('vinylIcon');
+  const playPauseBtn= document.getElementById('playPauseBtn');
+  const seekBar     = document.getElementById('seekBar');
+  const volumeBar   = document.getElementById('volumeBar');
+  const muteIcon    = document.getElementById('muteIcon');
+  const currentTimeEl = document.getElementById('currentTime');
+  const durationEl    = document.getElementById('duration');
+  const siteLogo      = document.getElementById('siteLogo');
+
+  let expandedOpen = false;
+
+  function toggleExpand() {
+    expandedOpen = !expandedOpen;
+    expanded.style.display = expandedOpen ? 'block' : 'none';
+  }
+
+  function togglePlay() {
+    if (audio.paused) {
+      audio.play();
+    } else {
+      audio.pause();
+    }
+  }
 
   function toggleMute() {
     audio.muted = !audio.muted;
-    unmuteBtn.textContent = audio.muted ? '🔇 UNMUTE' : '🔊 MUTE';
-    unmuteBtn.style.background = audio.muted ? 'rgba(245,197,24,0.1)' : 'rgba(245,197,24,0.25)';
-    logo && (audio.muted ? logo.classList.remove('logo-pulsing') : logo.classList.add('logo-pulsing'));
+    muteIcon.textContent = audio.muted ? '🔇' : '🔊';
+    if (siteLogo) siteLogo.classList.toggle('logo-pulsing', !audio.muted);
   }
 
-  audio.addEventListener('play', () => vinyl.classList.add('playing'));
-  audio.addEventListener('pause', () => vinyl.classList.remove('playing'));
-  audio.addEventListener('ended', () => vinyl.classList.remove('playing'));
+  function formatTime(s) {
+    const m = Math.floor(s / 60);
+    const sec = Math.floor(s % 60);
+    return m + ':' + (sec < 10 ? '0' : '') + sec;
+  }
 
-  // Start spinning vinyl since autoplay is on
+  audio.addEventListener('play', () => {
+    vinyl.classList.add('playing');
+    floatBtn.classList.add('playing');
+    playPauseBtn.textContent = '⏸';
+  });
+
+  audio.addEventListener('pause', () => {
+    vinyl.classList.remove('playing');
+    floatBtn.classList.remove('playing');
+    playPauseBtn.textContent = '▶';
+  });
+
+  audio.addEventListener('timeupdate', () => {
+    if (audio.duration) {
+      seekBar.max = audio.duration;
+      seekBar.value = audio.currentTime;
+      currentTimeEl.textContent = formatTime(audio.currentTime);
+      durationEl.textContent = formatTime(audio.duration);
+    }
+  });
+
+  seekBar.addEventListener('input', () => {
+    audio.currentTime = seekBar.value;
+  });
+
+  volumeBar.addEventListener('input', () => {
+    audio.volume = volumeBar.value / 100;
+    audio.muted = volumeBar.value == 0;
+    muteIcon.textContent = audio.muted ? '🔇' : '🔊';
+    if (siteLogo) siteLogo.classList.toggle('logo-pulsing', !audio.muted);
+  });
+
+  // Start vinyl spinning (autoplay muted)
   window.addEventListener('load', () => {
     vinyl.classList.add('playing');
+    floatBtn.classList.add('playing');
   });
 </script>
 
